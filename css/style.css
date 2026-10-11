@@ -196,9 +196,11 @@ input[type="text"]:focus { border-color: var(--primary); }
 
 /* Hands */
 .hands { width: 100%; height: auto; display: block; }
-.hand-palm { fill: #fde7cf; stroke: #e5b58c; stroke-width: 2; }
-.hand-finger { fill: #fde7cf; stroke: #e5b58c; stroke-width: 2; transition: fill .1s; }
-.hand-finger.active { fill: var(--fc); stroke: var(--fc); }
+.hand-palm { fill: #f5d5b9; stroke: #c99570; stroke-width: 1.6; stroke-linejoin: round; }
+.hand-finger { fill: transparent; transition: fill .1s; }
+.hand-finger.active { fill: var(--fc); }
+.hand-nails { fill: #fff2e8; fill-opacity: .65; stroke: #bd8968; stroke-opacity: .45; stroke-width: 1; pointer-events: none; }
+.hand-details { fill: none; stroke: #ac795a; stroke-width: 1.2; stroke-linecap: round; opacity: .35; pointer-events: none; }
 
 /* Results */
 .results-card { max-width: 620px; margin: 0 auto; text-align: center; }

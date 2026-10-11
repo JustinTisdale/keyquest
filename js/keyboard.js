@@ -90,28 +90,35 @@ KQ.Keyboard = class {
   }
 };
 
-// Simple SVG hands; the finger for the next key lights up.
+// Back-of-hand view with a continuous silhouette and individual finger highlights.
 KQ.handsSvg = function () {
-  const finger = (id, x, y, w, h) => `<rect id="finger-${id}" class="hand-finger finger-${id}" x="${x}" y="${y}" width="${w}" height="${h}" rx="${w / 2}"/>`;
-  const left = `
-    <g class="hand hand-left">
-      <rect class="hand-palm" x="38" y="112" width="128" height="96" rx="34"/>
-      ${finger("lp", 34, 66, 26, 80)}
-      ${finger("lr", 66, 40, 28, 106)}
-      ${finger("lm", 100, 30, 28, 116)}
-      ${finger("li", 134, 46, 28, 100)}
-      <rect id="finger-lt" class="hand-finger finger-th" x="158" y="120" width="26" height="72" rx="13" transform="rotate(-38 171 156)"/>
+  const finger = (id, d) => `<path id="finger-${id}" class="hand-finger finger-${id.endsWith("t") ? "th" : id}" d="${d}"/>`;
+  const hand = (side, transform = "") => `
+    <g class="hand hand-${side === "l" ? "left" : "right"}"${transform ? ` transform="${transform}"` : ""}>
+      <path class="hand-palm" d="M70 248 C71 232 66 219 57 205 C47 188 43 167 40 146 L29 94 C27 85 30 78 37 76 C44 74 50 79 52 88 L64 130 C66 137 72 136 71 128 L59 56 C57 46 62 39 70 38 C78 37 84 43 85 53 L95 118 C96 125 102 125 102 117 L98 35 C98 24 103 17 112 17 C121 17 126 24 126 35 L129 117 C129 124 135 126 137 119 L146 51 C147 41 153 36 161 38 C170 40 172 48 170 58 L159 136 C158 145 161 151 166 146 L189 121 C196 114 204 115 209 121 C214 127 212 135 206 142 L186 170 C179 180 177 192 169 206 C162 220 151 230 150 248 Z"/>
+      ${finger(side + "p", "M40 146 L29 94 C27 85 30 78 37 76 C44 74 50 79 52 88 L64 130 C66 137 68 140 69 143 Q57 153 40 146 Z")}
+      ${finger(side + "r", "M71 128 L59 56 C57 46 62 39 70 38 C78 37 84 43 85 53 L95 118 L96 129 Q84 138 71 128 Z")}
+      ${finger(side + "m", "M102 124 L98 35 C98 24 103 17 112 17 C121 17 126 24 126 35 L129 124 Q115 132 102 124 Z")}
+      ${finger(side + "i", "M137 127 L146 51 C147 41 153 36 161 38 C170 40 172 48 170 58 L159 136 Q145 141 137 127 Z")}
+      ${finger(side + "t", "M166 146 L189 121 C196 114 204 115 209 121 C214 127 212 135 206 142 L186 170 Q181 178 178 186 Q163 181 159 168 Q157 156 166 146 Z")}
+      <g class="hand-nails">
+        <path d="M33 89 Q32 81 38 80 Q44 79 47 87 L49 96 Q42 100 35 97 Z"/>
+        <path d="M64 53 Q63 44 70 43 Q78 42 80 51 L81 62 Q74 66 66 63 Z"/>
+        <path d="M103 33 Q103 23 112 23 Q120 23 121 33 L121 44 Q112 48 104 44 Z"/>
+        <path d="M151 51 Q152 42 160 43 Q167 44 166 53 L164 64 Q156 67 149 62 Z"/>
+        <path d="M191 125 Q198 118 203 123 Q209 128 202 135 L195 143 Q187 141 184 134 Z"/>
+      </g>
+      <g class="hand-details">
+        <path d="M39 115 Q46 110 54 111 M69 90 Q77 86 85 87 M105 78 Q114 75 123 78 M145 91 Q154 90 163 95"/>
+        <path d="M47 143 Q54 139 61 140 M76 129 Q84 125 91 127 M106 124 Q115 121 124 124 M141 132 Q148 129 155 134"/>
+        <path d="M178 150 Q184 150 189 155 M157 157 Q150 172 154 187"/>
+        <path d="M81 148 Q89 172 91 199 M112 144 Q116 172 115 206 M143 149 Q134 181 133 207"/>
+        <path d="M79 231 Q109 236 142 231"/>
+      </g>
     </g>`;
-  const right = `
-    <g class="hand hand-right" transform="translate(440 0) scale(-1 1)">
-      <rect class="hand-palm" x="38" y="112" width="128" height="96" rx="34"/>
-      ${finger("rp", 34, 66, 26, 80)}
-      ${finger("rr", 66, 40, 28, 106)}
-      ${finger("rm", 100, 30, 28, 116)}
-      ${finger("ri", 134, 46, 28, 100)}
-      <rect id="finger-rt" class="hand-finger finger-th" x="158" y="120" width="26" height="72" rx="13" transform="rotate(-38 171 156)"/>
-    </g>`;
-  return `<svg class="hands" viewBox="0 0 440 220" aria-hidden="true">${left}${right}</svg>`;
+  const left = hand("l");
+  const right = hand("r", "translate(440 0) scale(-1 1)");
+  return `<svg class="hands" viewBox="0 0 440 260" aria-hidden="true">${left}${right}</svg>`;
 };
 
 KQ.highlightFinger = function (root, ch) {
